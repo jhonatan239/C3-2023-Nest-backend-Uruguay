@@ -3,6 +3,7 @@ import { DataRangeDto } from 'src/business/dtos/datarange.dto';
 import { PaginationDto } from 'src/business/dtos/pagination.dto';
 import { TransferService } from 'src/business/services';
 import { transferDto } from '../../../business/dtos/transfer.dto';
+import { TransferEntity } from 'src/data/persistence';
 
 @Controller('transfer')
 export class TransferController {
@@ -44,4 +45,10 @@ export class TransferController {
   deleteTransfer(@Param('transferId') transferId: string) {
     return this.transferService.deleteTransfer(transferId);
   }
+
+  @Get('getTransfers')
+  getTransfers(): TransferEntity[] {
+      return this.transferService.getTransAll()
+  }
+
 }

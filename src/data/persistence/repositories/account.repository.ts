@@ -14,41 +14,44 @@ export class AccountRepository extends Base<AccountEntity> implements CRUD<Accou
       return this.database.at(-1) ?? entity;
     } catch (error) {
       throw new Error('This method is not implemented updateAccount');
-    
+
     }
   }
 
   update(id: string, entity: AccountEntity): AccountEntity {
-   try {
-     const indexCurrentEntity = this.database.findIndex(
-       (item) => item.id === id && typeof item.deleted_at === 'undefined',
-     );
-     if (indexCurrentEntity >= 0)
-       this.database[indexCurrentEntity] = {
-         ...this.database[indexCurrentEntity],
-         ...entity,
-         id,
-       } as AccountEntity;
-     else throw new AccountEntity();
-     return this.database[indexCurrentEntity];
-   } catch (error) {
-    throw new Error('This method is not implemented updateAccount');
-    
-   }
+    try {
+      const indexCurrentEntity = this.database.findIndex(
+        (item) => item.id === id && typeof item.deleted_at === 'undefined',
+      );
+      if (indexCurrentEntity >= 0)
+        this.database[indexCurrentEntity] = {
+          ...this.database[indexCurrentEntity],
+          ...entity,
+          id,
+        } as AccountEntity;
+      else throw new AccountEntity();
+      return this.database[indexCurrentEntity];
+    } catch (error) {
+      throw new Error('This method is not implemented updateAccount');
+
+    }
   }
 
   delete(id: string, soft?: boolean): void {
-    const index = this.database.findIndex(
-      (item) => item.id === id
-    );
-    if (index == -1){
-    throw new Error('No se encontraron elementos');
+    
+    const index = this.database.findIndex((item) => item.id === id);
+    
+    console.log(id)
+    
+    if (index == -1) {
+      throw new Error('No se encontraron elementos');
     }
-if (soft){
-    this.hardDelete(index)
-  }else{
-    this.softDelete(index)
-  }
+    if (soft) {
+      this.softDelete(index)
+
+    } else {
+      this.hardDelete(index)
+    } 
 
   }
 
@@ -75,10 +78,13 @@ if (soft){
     const currentEntity = this.database.find(
       (item) => item.id === id && typeof item.deleted_at === 'undefined',
     );
-    if (!currentEntity)throw new NotFoundException("Elemento no encontrado"); 
+
+    //if (currentEntity) return this.database[currentEntity];
+    //else throw new NotFoundException("Elemento no encontrado");
+    if (!currentEntity) throw new NotFoundException("Elemento no encontrado");
     return currentEntity;
-    
-    
+
+
   }
 
   findByState(state: boolean): AccountEntity[] {
@@ -106,6 +112,6 @@ if (soft){
     else throw new Error('Datos de no encontrados');
   }
 
- 
+
 
 }

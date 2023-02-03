@@ -1,26 +1,30 @@
-import { Body, Controller, Delete, Get, Logger, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, Post, Put, Query } from '@nestjs/common';
 import { ChangeAccountTypeDto } from 'src/business/dtos/changeAccountType.dto';
 import { AccountEntity, AccountTypeEntity } from 'src/data/persistence';
 import { AccountService } from 'src/business/services';
 import { CreateAccountTypeDto } from 'src/business/dtos/createAccountType.dto';
 import { CreateAccountDto } from 'src/business/dtos/createAccount.dto';
 import { ObservableHandel } from 'src/Patrones/Observable/ObservableHandle';
+import { query } from 'express';
 
 @Controller('account')
-export class AccountController extends ObservableHandel {
+export class AccountController {//extends ObservableHandel 
 
     constructor(private readonly accountService: AccountService) {
 
-        super();
+        //super();
     }
 
     //Un solo delete  ya que luego en 
     //repositorio en base al valor booleno
     //se sabe si es logico o fisico
-    
-    @Delete('delete/')
-    deleteAccount(@Body()accountId: string,  sof?: boolean): void {
-        this.accountService.deleteAccount(accountId, sof)
+
+
+    @Put('delete/:id')
+    deleteAccount(@Param('id') accountId: string): void {
+        //deleteAccount(@Param('accountId')accountId: string,  sof?: boolean): void {
+
+        this.accountService.deleteAccount(accountId, false)
     }
     /*
         //Delete Logico
@@ -75,8 +79,8 @@ export class AccountController extends ObservableHandel {
     }
 
     //Agrega Balance
-    @Post('addBalance')
-    addBalance(@Body() accountId: string, amount: number): void {
+    @Post('addBalance/:id')
+    addBalance(@Param('id') accountId: string, @Query('amount') amount: number): void {
         this.accountService.addBalance(accountId, amount)
     }
 

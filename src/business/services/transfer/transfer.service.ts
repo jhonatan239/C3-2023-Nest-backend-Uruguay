@@ -108,4 +108,9 @@ export class TransferService {
     this.transferRepocitory.delete(transferId)
   }
 
+  getTransAll(): TransferEntity[] {
+    let tran: TransferEntity[] = []
+    tran = this.transferRepocitory.findAll();
+    return tran
+}
 }

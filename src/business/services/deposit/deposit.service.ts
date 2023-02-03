@@ -26,12 +26,13 @@ export class DepositService {
     createDeposit(deposit: depositDto): DepositEntity {
         const newDeposit = new DepositEntity()
         const newAccount = this.accountRepocitory.findOneById(deposit.account_id)
+       
         newAccount.balance += deposit.amount
         newDeposit.account_id = newAccount
         newDeposit.amount = deposit.amount
         newDeposit.date_time = Date.now()
         
-        
+
         return this.depositRepocitory.register(newDeposit);
     }
 
