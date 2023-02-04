@@ -79,11 +79,8 @@ export class AccountService {
      * @memberof AccountService
      */
     addBalance(accountId: string, amount: number): void {
-        console.log(accountId)
-        let acc = this.accountRepository.findOneById(accountId)
-        
-        acc.balance += amount
-        this.accountRepository.update(accountId, acc)
+
+        this.accountRepository.addBalance(accountId, amount)
     }
 
     /**

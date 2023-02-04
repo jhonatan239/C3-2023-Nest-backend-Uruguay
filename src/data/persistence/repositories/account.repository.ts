@@ -113,5 +113,15 @@ export class AccountRepository extends Base<AccountEntity> implements CRUD<Accou
   }
 
 
+  addBalance(accountId: string, amount: number): void {
+    console.log(accountId)
+    let acc = this.findOneById(accountId)
+    
+    acc.balance += amount
+    this.update(accountId, acc)
+}
+
+
+
 
 }
