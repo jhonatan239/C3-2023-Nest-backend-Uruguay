@@ -25,11 +25,16 @@ export class TransferService {
   createTransfer(transfer: transferDto): TransferEntity {
     const newTransfer = new TransferEntity
     
-    //const newAaccount =
+    const income =this.accountService.getId(transfer.income_id)
+    const outcome =this.accountService.getId(transfer.outcome_id)
 
     newTransfer.amount = transfer.amount
-    newTransfer.income_id = this.accountService.getId(transfer.income_id)
-    newTransfer.outcome_id = this.accountService.getId(transfer.outcome_id)
+
+    this.accountService.addBalance(income.id, newTransfer.amount)
+    this.accountService.removeBalance(outcome.id, newTransfer.amount)
+    
+    newTransfer.income_id = income
+    newTransfer.outcome_id = outcome
     newTransfer.reason = transfer.reason
     newTransfer.date_time = Date.now()
 
