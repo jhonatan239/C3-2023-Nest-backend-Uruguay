@@ -8,6 +8,8 @@ import { AccountEntity } from '../entities/account.entity';
 @Injectable()
 export class AccountRepository extends Base<AccountEntity> implements CRUD<AccountEntity>{
 
+
+
   register(entity: AccountEntity): AccountEntity {
     try {
       this.database.push(entity);
@@ -95,13 +97,25 @@ export class AccountRepository extends Base<AccountEntity> implements CRUD<Accou
     else throw new Error('Datos de no encontrados');
   }
 
+
   findByCustomer(customerId: string): AccountEntity[] {
-    const currentEntity: AccountEntity[] = this.database.filter(
-      (item) => item.customer_id.id === customerId && typeof item.deleted_at === 'undefined',
+    let finded = this.database.filter(
+        (item) => 
+          item.customer_id.id == customerId &&
+          item.deleted_at == undefined &&
+          item.customer_id.daletedAt == undefined
     );
-    if (currentEntity) return currentEntity;
-    else throw new Error('Datos de no encontrados');
+    if (finded == undefined) throw new NotFoundException();
+    return finded;
   }
+
+  // findByCustomer(customerId: string): AccountEntity[] {
+  //   const currentEntity: AccountEntity[] = this.database.filter(
+  //     (item) => item.customer_id.id === customerId && typeof item.deleted_at === 'undefined',
+  //   );
+  //   if (currentEntity) return currentEntity;
+  //   else throw new Error('Datos de no encontrados');
+  // }
 
 
   findByAccountType(accountTypeId: string): AccountEntity[] {

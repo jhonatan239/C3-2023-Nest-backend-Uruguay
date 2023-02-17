@@ -11,4 +11,5 @@ export class SignInDto {
     @IsString()
     @Min(5)
     password: string;
+    
 }

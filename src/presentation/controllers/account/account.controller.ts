@@ -78,6 +78,12 @@ export class AccountController {//extends ObservableHandel
         return this.accountService.getId(accountId).balance
     }
 
+
+    @Get('getAccountByCustomer/:id')
+    findByCustomer(@Param('id') customerId: string): AccountEntity[] {
+        return this.accountService.findByCustomer(customerId)
+    }
+    
     //Agrega Balance
     @Post('addBalance/:id')
     addBalance(@Param('id') accountId: string, @Query('amount') amount: number): void {
@@ -121,5 +127,7 @@ export class AccountController {//extends ObservableHandel
     getAccountTypes(): AccountTypeEntity[] {
         return this.accountService.getAccountTypeAll()
     }
+
+
 
 }

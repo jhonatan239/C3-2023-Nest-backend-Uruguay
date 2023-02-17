@@ -26,14 +26,22 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: SignInDto): string {
-    const answer = this.customerRepository.findOneByEmailAndPassword(
+  signIn(user: SignInDto): {token:string} {
+    console.log(user.username + " " + user.password);
+    const answer = this.customerRepository.findOneByEmailAndPassword( 
       user.username,
-      user.password,
+      user.password
     );
-    if (answer) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest")
+      
+    if (answer){ 
+     
+      const token = jwt.sign({customer:answer}, process.env.TOKEN_SECRET || "tokentest")
+      return {token}
+    
+    }
     //'Falta retornar un JWT';
     else throw new UnauthorizedException("User Incorrect");
+  
   }
 
   /**
@@ -53,25 +61,29 @@ export class SecurityService {
     newCustomer.email = user.email;
     newCustomer.phone = user.phone;
     newCustomer.password = user.password;
+    
+    if(!this.customerRepository.findOneByEmail(user.email)){
 
-    const customer = this.customerRepository.register(newCustomer);
+      const customer = this.customerRepository.register(newCustomer);
 
-    console.log(customer)
-
-    if (customer) {
-      const newAccount = new CreateAccountDto()
-      newAccount.CustomerId = customer.id
-      newAccount.account_type_id = user.accountTypeId
-      newAccount.balance = user.balance || 0
-
-      //createAccount que recibe DTO O ENTITY????????
-      const account = this.accountService.createAccount(newAccount);
-      if (account) {
-        //this.jwtService.verify(JWToken, { secret: "Sofka" });
-        return jwt.sign({ id: customer.id },   process.env.TOKEN_SECRET || "tokentest");
-
+      console.log(customer)
+  
+      if (customer) {
+        const newAccount = new CreateAccountDto()
+        newAccount.CustomerId = customer.id
+        newAccount.account_type_id = user.accountTypeId
+        newAccount.balance = user.balance || 0
+  
+        //createAccount que recibe DTO O ENTITY????????
+        const account = this.accountService.createAccount(newAccount);
+        if (account) {
+          //this.jwtService.verify(JWToken, { secret: "Sofka" });
+          return jwt.sign({ customer:customer},   process.env.TOKEN_SECRET || "tokentest");
+  
+        } else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
-    } else throw new InternalServerErrorException();
+    }else throw new InternalServerErrorException();
+   
   }
 
   /**
@@ -83,14 +95,10 @@ export class SecurityService {
 
 
   signOut(JWToken: string): void {
-    if (!jwt.verify(JWToken, process.env.TOKEN_SECRET || "tokentest"))throw new Error('Method not implemented.'); 
-     
+    if (!jwt.verify(JWToken, process.env.TOKEN_SECRET || "tokentest"))throw new Error('Method not implemented.');   
       //localStorage.removeItem('token');
       console.log("Sign Out Complete. ")
       //window.location.href = '/login';
-    
   }
-
-
 }
 

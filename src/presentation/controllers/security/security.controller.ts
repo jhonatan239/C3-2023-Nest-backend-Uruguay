@@ -15,7 +15,7 @@ export class SecurityController {
     }
 
     @Post('SignIn')
-    signIn(@Body() signIn: SignInDto): string{
+    signIn(@Body() signIn: SignInDto): {token:string}{
        
         return this.securityService.signIn(signIn)
     }

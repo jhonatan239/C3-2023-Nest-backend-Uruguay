@@ -2,11 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Base } from 'src/data/base/base.abstract';
 import { TransferEntity } from '../entities/transfer.entity';
 import { CRUD } from '../interfaces/crud.interface';
+import { AccountRepository } from 'src/data/persistence';
 
 @Injectable()
 export class TranferRepository extends Base<TransferEntity> implements CRUD<TransferEntity>{
 
   register(entity: TransferEntity): TransferEntity {
+
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }

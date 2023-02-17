@@ -160,6 +160,14 @@ export class AccountService {
         acc = this.accountTypeRepocitory.findOneById(accountTypeId)
         return acc
     }
+
+
+
+    findByCustomer(customerId: string): AccountEntity[]{
+        let acc: AccountEntity [] = []  ;
+        acc = this.accountRepository.findByCustomer(customerId)
+        return acc
+    }
     /**
      * Cambiar el tipo de cuenta a una cuenta
      *

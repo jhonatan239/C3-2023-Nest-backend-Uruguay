@@ -71,4 +71,6 @@ export class AccountTypeRepository extends Base<AccountTypeEntity> implements CR
   }
 
 
+
+
 }

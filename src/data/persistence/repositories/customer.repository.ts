@@ -59,7 +59,8 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
 
   }
 
-  findOneByEmailAndPassword(email: string, password: string): boolean {
+  findOneByEmailAndPassword(email: string, password: string): CustomerEntity {
+    
     const indexCurrentEntity = this.database.findIndex(
       (item) =>
         item.email === email &&
@@ -67,11 +68,13 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
         typeof item.daletedAt === 'undefined',
     
         );
-    return indexCurrentEntity >= 0 ? true : false;
+    return this.database[indexCurrentEntity] ;
     ;
     
 
   }
+
+
 
   findOneByDocumentTypeAndDocument(
     documentTypeId: string,
@@ -83,12 +86,12 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
     else throw new Error('No se encontro el documento');
   }
 
-  findOneByEmail(email: string): CustomerEntity {
+  findOneByEmail(email: string): CustomerEntity | undefined {
     const currentEntity = this.database.find(
       (item) => item.email === email && typeof item.daletedAt === 'undefined',
     );
     if (currentEntity) return currentEntity;
-    else throw new Error('No se encontro el email');
+
   }
 
   findOneByPhone(phone: string): CustomerEntity {

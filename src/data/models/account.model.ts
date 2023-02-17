@@ -9,4 +9,4 @@ export interface AccountModel {
     state:boolean;
     deleted_at: Date | number;
 
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
